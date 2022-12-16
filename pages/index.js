@@ -2,20 +2,29 @@ import Head from 'next/head'
 import { useState } from 'react'
 import styles from '../styles/Home.module.css'
 import Image from 'next/image'
+
+const countriesData = [
+  {
+    name: "Germany",
+    states: ["Duesseldorf", "Leinfelden-Echterdingen", "Eschborn"]
+  },
+  {
+    name: "Pakistan",
+    states: ["Lahore", "Islamabad", "Gujranwala", "Karachi"]
+  },
+  {
+    name: "France",
+    states: ["Auvergne", "Bretagne", "Corse", "Centre"]
+  }
+];
+
+
 export default function Home() {
   const [registrationForm, setRegistrationFrom] = useState({
-    firstName: '',
-    lastName: '',
-    country: "",
-    city: "",
+    firstName: "",
+    lastName: "",
   })
   const [formInfo, setFromInfo] = useState([]);
-  const [countries, setCountry] = useState([
-    "United States of America",
-    "Canada",
-    "Pakistan",
-    "Protugal"
-  ]);
 
   const inputChange = (event) => {
     const { name, value, type, checked } = event.target;
@@ -27,18 +36,42 @@ export default function Home() {
     })
   }
 
+  const [{ country, city }, setData] = useState({
+    country: "",
+    city: ""
+  });
+
+  const countries = countriesData.map((country) => (
+    <option key={country.name} value={country.name}>
+      {country.name}
+    </option>
+  ));
+
+  const states = countriesData.find(item => item.name === country)?.states.map((city) => (
+    <option key={city} value={city}>
+      {city}
+    </option>
+  ));
+
+  function handleCountryChange(event) {
+    setData(data => ({ city: '', country: event.target.value }));
+  }
+  function handleStateChange(event) {
+    setData(data => ({ ...data, city: event.target.value }));
+  }
+
   const formSubmit = (e) => {
     e.preventDefault();
     const updateData = {
+       country,
+       city,
       firstName: registrationForm.firstName,
-      lastName: registrationForm.lastName,
-      country: registrationForm.country,
+      lastName: registrationForm.lastName
     }
     setFromInfo([...formInfo, updateData])
     setRegistrationFrom({
       firstName: "",
       lastName: "",
-      country: "",
     })
   }
   return (
@@ -61,19 +94,20 @@ export default function Home() {
                     <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl">FirstName</th>
                     <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl">LastName</th>
                     <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl">Country</th>
+                    <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl">City</th>
                   </tr>
                 </thead>
                 <tbody>
                   {formInfo?.map((finfo, inde) => {
-                    console.log(finfo)
-                    const { firstName, lastName, country } = finfo;
+                    const { firstName, lastName, country, city } = finfo;
                     return <tr key={inde}>
                       <td className="border-t-2 border-gray-200 px-4 py-1">
-                        <Image  width={100} height={100} className="block mx-auto w-10 h-10 rounded-full sm:mx-0 sm:shrink-0" src="/images/Nasir.jpg" alt="Woman's Face" />
+                        <Image width={100} height={100} className="block mx-auto w-10 h-10 rounded-full sm:mx-0 sm:shrink-0" src="/images/Nasir.jpg" alt="Woman's Face" />
                       </td>
                       <td className="border-t-2 border-gray-200 px-4 py-3">{firstName}</td>
                       <td className="border-t-2 border-gray-200 px-4 py-3">{lastName}</td>
                       <td className="border-t-2 border-gray-200 px-4 py-3">{country}</td>
+                      <td className="border-t-2 border-gray-200 px-4 py-3">{city}</td>
                     </tr>
                   })}
                 </tbody>
@@ -132,16 +166,27 @@ export default function Home() {
                         <select
                           id="country"
                           name="country"
-                          value={registrationForm.country}
-                          onChange={inputChange}
+                          value={country}
+                          onChange={handleCountryChange}
                           autoComplete="country-name"
                           className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
                           <option value="" disabled>Select Country</option>
-                          {
-                            countries.map((countryDrop, ind) =>
-                              <option key={ind}>{countryDrop}</option>
-                            )
-                          }
+                          {countries}
+                        </select>
+                      </div>
+                      <div className="col-span-6 sm:col-span-3">
+                        <label htmlFor="country" className="block text-sm font-medium text-gray-700">
+                          City
+                        </label>
+                        <select
+                          id="city"
+                          name="city"
+                          value={city}
+                          onChange={handleStateChange}
+                          autoComplete="country-name"
+                          className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
+                          <option value="" disabled>Select City</option>
+                          {states}
                         </select>
                       </div>
                     </div>

@@ -26,33 +26,30 @@ export default function Home() {
   })
   const [formInfo, setFromInfo] = useState([]);
 
+
+
+
   const inputChange = (event) => {
     const { name, value, type, checked } = event.target;
-    setRegistrationFrom((preValue) => {
-      return {
-        ...preValue,
-        [name]: type === 'checkbox' ? checked : value,
-      }
-    })
+    setRegistrationFrom({ ...registrationForm, [name]: type === 'checkbox' ? checked : value, })
   }
+
+  // Cascading dropdown
 
   const [{ country, city }, setData] = useState({
     country: "",
     city: ""
   });
-
   const countries = countriesData.map((country) => (
     <option key={country.name} value={country.name}>
       {country.name}
     </option>
   ));
-
   const states = countriesData.find(item => item.name === country)?.states.map((city) => (
     <option key={city} value={city}>
       {city}
     </option>
   ));
-
   function handleCountryChange(event) {
     setData(data => ({ city: '', country: event.target.value }));
   }
@@ -60,19 +57,55 @@ export default function Home() {
     setData(data => ({ ...data, city: event.target.value }));
   }
 
+  const [userinfo, setUserInfo] = useState({
+    languages: [],
+  });
+  const handleChange = (e) => {
+    // Destructuring
+    const { value, checked } = e.target;
+    const { languages } = userinfo;
+
+    console.log(`${value} is ${checked}`);
+
+    // Case 1 : The user checks the box
+    if (checked) {
+      setUserInfo({
+        languages: [...languages, value],
+      });
+    }
+
+    // Case 2 : The user unchecks the box
+    else {
+      setUserInfo({
+        languages: languages.filter((e) => e !== value),
+      });
+    }
+  };
+
+  const [errors, setErrors] = useState({});
+
+
+
   const formSubmit = (e) => {
     e.preventDefault();
     const updateData = {
-       country,
-       city,
-      firstName: registrationForm.firstName,
-      lastName: registrationForm.lastName
+      ...userinfo,
+      ...registrationForm,
+      country,
+      city,
     }
     setFromInfo([...formInfo, updateData])
     setRegistrationFrom({
       firstName: "",
       lastName: "",
     })
+    setUserInfo({
+      languages: [],
+    })
+
+    if (!errors.firstName) {
+      setErrors("Must be Required")
+    }
   }
   return (
     <>
@@ -95,11 +128,12 @@ export default function Home() {
                     <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl">LastName</th>
                     <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl">Country</th>
                     <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl">City</th>
+                    <th className="px-1 py-1 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl">languages</th>
                   </tr>
                 </thead>
                 <tbody>
                   {formInfo?.map((finfo, inde) => {
-                    const { firstName, lastName, country, city } = finfo;
+                    const { firstName, lastName, country, city, languages } = finfo;
                     return <tr key={inde}>
                       <td className="border-t-2 border-gray-200 px-4 py-1">
                         <Image width={100} height={100} className="block mx-auto w-10 h-10 rounded-full sm:mx-0 sm:shrink-0" src="/images/Nasir.jpg" alt="Woman's Face" />
@@ -108,6 +142,9 @@ export default function Home() {
                       <td className="border-t-2 border-gray-200 px-4 py-3">{lastName}</td>
                       <td className="border-t-2 border-gray-200 px-4 py-3">{country}</td>
                       <td className="border-t-2 border-gray-200 px-4 py-3">{city}</td>
+                      {
+                        languages.map((lang, ind) => <td key={ind} className="border-t-2 border-gray-200 ">{lang},</td>)
+                      }
                     </tr>
                   })}
                 </tbody>
@@ -145,6 +182,7 @@ export default function Home() {
                           onChange={inputChange}
                           autoComplete="given-name"
                           className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" />
+                       <p> {errors.firstName}</p>
                       </div>
                       <div className="col-span-6 sm:col-span-3">
                         <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
@@ -188,6 +226,140 @@ export default function Home() {
                           <option value="" disabled>Select City</option>
                           {states}
                         </select>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-6">
+                          <div className="form-check m-3">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="languages"
+                              value="Javascript"
+                              id="flexCheckDefault"
+                              onChange={handleChange}
+                            />
+                            <label
+                              className="form-check-label"
+                              htmlFor="flexCheckDefault"
+                            >
+                              Javascript
+                            </label>
+                          </div>
+                          <div className="form-check m-3">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="languages"
+                              value="Python"
+                              id="flexCheckDefault"
+                              onChange={handleChange}
+                            />
+                            <label
+                              className="form-check-label"
+                              htmlFor="flexCheckDefault"
+                            >
+                              Python
+                            </label>
+                          </div>
+                          <div className="form-check m-3">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="languages"
+                              value="Java"
+                              id="flexCheckDefault"
+                              onChange={handleChange}
+                            />
+                            <label
+                              className="form-check-label"
+                              htmlFor="flexCheckDefault"
+                            >
+                              Java
+                            </label>
+                          </div>
+                          <div className="form-check m-3">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="languages"
+                              value="PHP"
+                              id="flexCheckDefault"
+                              onChange={handleChange}
+                            />
+                            <label
+                              className="form-check-label"
+                              htmlFor="flexCheckDefault"
+                            >
+                              PHP
+                            </label>
+                          </div>
+                        </div>
+                        <div className="col-md-6">
+                          <div className="form-check m-3">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="languages"
+                              value="C#"
+                              id="flexCheckDefault"
+                              onChange={handleChange}
+                            />
+                            <label
+                              className="form-check-label"
+                              htmlFor="flexCheckDefault"
+                            >
+                              C#
+                            </label>
+                          </div>
+                          <div className="form-check m-3">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="languages"
+                              value="C++"
+                              id="flexCheckDefault"
+                              onChange={handleChange}
+                            />
+                            <label
+                              className="form-check-label"
+                              htmlFor="flexCheckDefault"
+                            >
+                              C++
+                            </label>
+                          </div>
+                          <div className="form-check m-3">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="languages"
+                              value="C"
+                              id="flexCheckDefault"
+                              onChange={handleChange}
+                            />
+                            <label
+                              className="form-check-label"
+                              htmlFor="flexCheckDefault"
+                            >
+                              C
+                            </label>
+                          </div>
+                          <div className="form-check m-3">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="languages"
+                              value="Typescript"
+                              id="flexCheckDefault"
+                              onChange={handleChange}
+                            />
+                            <label
+                              className="form-check-label"
+                              htmlFor="flexCheckDefault"
+                            >
+                              Typescript
+                            </label>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

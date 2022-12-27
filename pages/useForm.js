@@ -1,30 +1,36 @@
-import React, { useEffect } from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
-const UseForm = (validate) => {
-    const [registrationForm, setRegistrationFrom] = useState({
+const UseForm = (allValidationPages) => {
+    const [formValues, setFormValues] = useState({
         firstName: "",
         lastName: "",
-        email: ""
+        email: "",
+        password: "",
+        confirmPassword: "",
     })
-    const [formInfo, setFromInfo] = useState([]);
+    const [formValuesSubmit, setFormValuesSubmit] = useState([]);
+    const [errors, setErrors] = useState({});
+    const [dataIsCorrect, setDataIsCorrect] = useState(false);
+
     const inputChange = (event) => {
         const { name, value, type, checked } = event.target;
-        setRegistrationFrom({ ...registrationForm, [name]: type === 'checkbox' ? checked : value, })
+        setFormValues({ ...formValues, [name]: type === 'checkbox' ? checked : value, })
     }
-    const [errors, setErrors] = useState({});
     const formSubmit = (e) => {
         e.preventDefault();
-        const updateData = {
-            ...registrationForm,
-        }
-        setErrors(validate(registrationForm))
-        setFromInfo([...formInfo, updateData])
-
+        setErrors(allValidationPages(formValues))
+        setDataIsCorrect(true)
     }
-
-
-    return { formSubmit, registrationForm, inputChange, formInfo, errors }
+    useEffect(() => {
+        if (Object.keys(errors).length === 0 && dataIsCorrect) {
+            const updateData = {
+                id: new Date().getTime().toString(),
+                ...formValues,
+            }
+            setFormValuesSubmit([...formValuesSubmit, updateData])
+        }
+    }, [errors])
+    return { formSubmit, formValues, inputChange, formValuesSubmit, errors }
 }
 
 export default UseForm

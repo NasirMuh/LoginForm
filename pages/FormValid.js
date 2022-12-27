@@ -1,11 +1,9 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import { useState } from 'react'
 import styles from '../styles/Home.module.css'
 // import { LockClosedIcon } from '@heroicons/react/20/solid'
 
 export default function Home() {
-
   const [registrationForm, setRegistrationFrom] = useState({
     firstName: '',
     lastName: '',
@@ -41,7 +39,6 @@ export default function Home() {
       setCheckBoxData(checkBoxData.filter((e) => (e !== value)))
     }
   }
-  console.log(checkBoxData)
 
   const formSubmit = (e) => {
     e.preventDefault();
@@ -332,7 +329,7 @@ export default function Home() {
 
 
 
-        {/* <div className="bg-gray-100 mt-7 px-8 py-5 rounded-lg" >
+         <div className="bg-gray-100 mt-7 px-8 py-5 rounded-lg" >
           <div className="md:grid md:grid-cols-3 md:gap-6 ">
             <div className="md:col-span-1">
               <div className="px-4 sm:px-0">
@@ -449,7 +446,7 @@ export default function Home() {
               </form>
             </div>
           </div>
-        </div> */}
+        </div> 
 
         <div className="hidden sm:block" aria-hidden="true">
           <div className="py-5">

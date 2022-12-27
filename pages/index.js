@@ -1,8 +1,12 @@
 import Head from 'next/head'
-import { useState } from 'react'
 import styles from '../styles/Home.module.css'
-import FormSignUp from './formSignUp'
+import CompleteFormWithOnePageWithoutProps from './CompleteFormWithOnePageWithoutProps'
+
+import CheckBoxCascading from './checkBoxCascading'
 import FormValid from './FormValid'
+import SignUpPage from './Component/signUpPage'
+import RegistrationPage from './Component/RegistrationPage'
+import ForgotPassword from './Component/ForgotPassword'
 export default function Home() {
 
 
@@ -15,7 +19,11 @@ export default function Home() {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         {/* <FormValid /> */}
-        <FormSignUp />
+        {/* <CheckBoxCascading /> */}
+        <ForgotPassword />
+        <RegistrationPage />
+        <SignUpPage />
+        {/* <CompleteFormWithOnePageWithoutProps/> */}
       </div>
     </>
   )

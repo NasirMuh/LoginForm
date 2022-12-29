@@ -7,6 +7,12 @@ import FormValid from './FormValid'
 import SignUpPage from './Component/signUpPage'
 import RegistrationPage from './Component/RegistrationPage'
 import ForgotPassword from './Component/ForgotPassword'
+import MultiStepsRegistrationForm from './Component/multiStepForm/MultiStepsRegistrationForm'
+import HorizontalLinearStepper from './Component/multiStepUsingMaterial/HorizontalLinearStepper'
+import GPTChat from './GPTChat'
+
+
+
 export default function Home() {
 
 
@@ -20,10 +26,16 @@ export default function Home() {
         </Head>
         {/* <FormValid /> */}
         {/* <CheckBoxCascading /> */}
-        <ForgotPassword />
+        {/* <ForgotPassword />
         <RegistrationPage />
-        <SignUpPage />
+        <SignUpPage /> */}
         {/* <CompleteFormWithOnePageWithoutProps/> */}
+
+        {/* <MultiStepsRegistrationForm /> */}
+        {/* <HorizontalLinearStepper /> */}
+
+        <GPTChat />
+
       </div>
     </>
   )
